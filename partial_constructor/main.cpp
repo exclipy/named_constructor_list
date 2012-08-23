@@ -11,39 +11,37 @@ using boost::gregorian::date;
 namespace mpl = boost::mpl;
 namespace fusion = boost::fusion;
 
-struct A {}; struct B {}; struct C {}; struct D {};
+struct Height {}; struct Weight {}; struct Name {}; struct Birthday {};
 
 typedef fusion::map<
-fusion::pair<A, int>,
-fusion::pair<B, int>,
-fusion::pair<C, string>,
-fusion::pair<D, date>> FooArguments;
+fusion::pair<Height, int>,
+fusion::pair<Weight, int>,
+fusion::pair<Name, string>,
+fusion::pair<Birthday, date>> PersonArguments;
 
-struct Foo : named_constructor_list<Foo, FooArguments>
+struct Person : named_constructor_list<Person, PersonArguments>
 {
-    Foo(int a, int b, string const& c, date const& d)
-    : a_(a), b_(b), c_(c), d_(d)
+    Person(int height, int weight, string const& name, date const& birthday)
+    : height_(height), weight_(weight), name_(name), birthday_(birthday)
     { }
-    int a_;
-    int b_;
-    string c_;
-    date d_;
+    int height_;
+    int weight_;
+    string name_;
+    date birthday_;
 };
 
 int main()
 {
-    date d(2012, 7, 28);
-    std::string s = "Bye";
-    std::vector<Foo> f = Foo::list_of<B, D, C>
-        (13, d, "Hie")
-        (21, date(2012, 7, 29), s);
-    for (Foo const& foo : f) {
+    std::vector<Person> f = Person::list_of<Name, Weight, Birthday>
+        ("Millie", 73, date(1969, 7, 16))
+        ("Sid", 23, date(2002, 5, 21));
+    for (Person const& foo : f) {
         using std::cout;
         using std::endl;
-        cout << foo.a_ << ' ';
-        cout << foo.b_ << ' ';
-        cout << foo.c_ << ' ';
-        cout << foo.d_ << ' ';
+        cout << foo.height_ << ' ';
+        cout << foo.weight_ << ' ';
+        cout << foo.name_ << ' ';
+        cout << foo.birthday_ << ' ';
         cout << endl;
     }
 }
